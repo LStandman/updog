@@ -36,19 +36,23 @@ proc smtp {host port} {
 
   spawn telnet $host $port
   expect {
-    "220" {
+    "\n220 *\n$" {
       set result 0
       send "QUIT\r"
-      expect "221"
     }
     timeout {
       # Send ^C
       send "\003\r"
-      expect eof
     }
   }
 
-  close
+  expect {
+    eof {}
+    timeout {
+      close
+    }
+  }
+
   wait
 
   return $result
