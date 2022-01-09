@@ -46,17 +46,14 @@ proc smtp {host port} {
     }
   }
 
-  expect {
-    eof {}
-    timeout {
-      close
-    }
-  }
+  catch {close}
 
   wait
 
   return $result
 }
+
+log_user 0
 
 set host "example"
 set port "25"
